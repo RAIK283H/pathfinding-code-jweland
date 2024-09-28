@@ -16,16 +16,18 @@ def get_test_path():
 
 
 def get_random_path():
-    # preconditions
     start_node = 0
-    last_node = (len(graph_data.graph_data[global_game_data.current_graph_index]) - 1)
     current_node = start_node
+    last_node = (len(graph_data.graph_data[global_game_data.current_graph_index]) - 1)
     target = global_game_data.target_node[global_game_data.current_graph_index]
     destination = target
     path = []
     previous_node = None
 
+    # Pre Conditions
     assert len(path) == 0, "Starting path needs to be empty"
+    assert last_node != 0, "Ending node is not first node"
+    assert start_node < target < last_node, "Target node is before last node and after start node"
 
     while(current_node != destination):
         neighbors = graph_data.graph_data[global_game_data.current_graph_index][current_node][1]
@@ -45,6 +47,7 @@ def get_random_path():
     # Post Conditions  
     assert len(path) > 0, "Path can not be empty" 
     assert current_node == last_node, "Ends with current node equals last node"
+
     return path
 
 
