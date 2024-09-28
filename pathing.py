@@ -30,11 +30,19 @@ def get_random_path():
     assert start_node < target < last_node, "Target node is before last node and after start node"
 
     while(current_node != destination):
+        # Creates the neighbors list
         neighbors = graph_data.graph_data[global_game_data.current_graph_index][current_node][1]
-
+        print(type(neighbors))
+        if start_node in neighbors:
+            neighbors.remove(start_node)
+        if last_node in neighbors and destination != last_node:
+            neighbors.remove(last_node)
         if previous_node in neighbors and len(neighbors) > 1:
             neighbors.remove(previous_node)
+
+        print(neighbors)
         
+        #Gets next node from neighbors list
         next_node = random.choice(neighbors)
         path.append(int(next_node))
 
