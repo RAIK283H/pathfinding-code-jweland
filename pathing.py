@@ -20,16 +20,31 @@ def get_random_path():
     start_node = 0
     last_node = (len(graph_data.graph_data[global_game_data.current_graph_index]) - 1)
     current_node = start_node
-
+    target = global_game_data.target_node[global_game_data.current_graph_index]
+    destination = target
     path = []
+    previous_node = None
 
-    while(current_node != last_node):
+    assert len(path) == 0, "Starting path needs to be empty"
+
+    while(current_node != destination):
         neighbors = graph_data.graph_data[global_game_data.current_graph_index][current_node][1]
+
+        if previous_node in neighbors and len(neighbors) > 1:
+            neighbors.remove(previous_node)
+        
         next_node = random.choice(neighbors)
         path.append(int(next_node))
+
+        previous_node = current_node
         current_node = next_node
 
-    # post conditions
+        if(current_node == target):
+            destination = last_node
+
+    # Post Conditions  
+    assert len(path) > 0, "Path can not be empty" 
+    assert current_node == last_node, "Ends with current node equals last node"
     return path
 
 

@@ -9,6 +9,7 @@ import config_data
 class Player:
 
     def __init__(self, player_config_data, player_index, batch, group):
+        self.time_spent = 0
         self.speed = relative_display_functions.get_absolute_speed()
         self.current_objective = 0
         self.player_index = player_index
@@ -28,6 +29,7 @@ class Player:
         self.absolute_x = graph_data.graph_data[global_game_data.current_graph_index][0][0][0]
         self.absolute_y = graph_data.graph_data[global_game_data.current_graph_index][0][0][1]
         self.distance_traveled = 0
+        self.time_spent = 0
 
     def update(self, dt):
         last_absolute_x = self.absolute_x
@@ -75,6 +77,10 @@ class Player:
             # Go to next object when target is reached
             if self.absolute_x == target_x and self.absolute_y == target_y:
                 self.current_objective += 1
+
+        # Updating time spent data
+        if global_game_data.current_player_index == self.player_index:
+            self.time_spent+= dt
 
         self.distance_traveled = self.distance_traveled + math.sqrt(math.pow(last_absolute_x-self.absolute_x, 2) + math.pow(last_absolute_y-self.absolute_y, 2))
         self.sprite.visible = (global_game_data.current_player_index == self.player_index)
