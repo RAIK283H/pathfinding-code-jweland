@@ -16,6 +16,9 @@ def get_test_path():
 
 
 def get_random_path():
+    # More up here
+    assert graph_data.graph_data is not None, "Graph does not exist"
+
     start_node = 0
     current_node = start_node
     last_node = (len(graph_data.graph_data[global_game_data.current_graph_index]) - 1)
@@ -32,15 +35,13 @@ def get_random_path():
     while(current_node != destination):
         # Creates the neighbors list
         neighbors = graph_data.graph_data[global_game_data.current_graph_index][current_node][1]
-        print(type(neighbors))
+
         if start_node in neighbors:
             neighbors.remove(start_node)
         if last_node in neighbors and destination != last_node:
             neighbors.remove(last_node)
         if previous_node in neighbors and len(neighbors) > 1:
             neighbors.remove(previous_node)
-
-        print(neighbors)
         
         #Gets next node from neighbors list
         next_node = random.choice(neighbors)
