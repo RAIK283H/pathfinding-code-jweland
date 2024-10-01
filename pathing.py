@@ -18,6 +18,8 @@ def get_test_path():
 def get_random_path():
     # More up here
     assert graph_data.graph_data is not None, "Graph does not exist"
+    assert global_game_data.target_node[global_game_data.current_graph_index] is not None, "Target does not exist"
+    assert len(graph_data.graph_data[global_game_data.current_graph_index]) > 0, "Graph data is not empty"
 
     start_node = 0
     current_node = start_node
@@ -25,12 +27,6 @@ def get_random_path():
     target = global_game_data.target_node[global_game_data.current_graph_index]
     destination = target
     path = []
-    previous_node = None
-
-    # Pre Conditions
-    assert len(path) == 0, "Starting path needs to be empty"
-    assert last_node != 0, "Ending node is not first node"
-    assert start_node < target < last_node, "Target node is before last node and after start node"
 
     while(current_node != destination):
         # Creates the neighbors list
@@ -38,23 +34,20 @@ def get_random_path():
 
         if start_node in neighbors:
             neighbors.remove(start_node)
-        if last_node in neighbors and destination != last_node:
-            neighbors.remove(last_node)
-        if previous_node in neighbors and len(neighbors) > 1:
-            neighbors.remove(previous_node)
-        
+
         #Gets next node from neighbors list
         next_node = random.choice(neighbors)
         path.append(int(next_node))
 
-        previous_node = current_node
         current_node = next_node
 
         if(current_node == target):
             destination = last_node
 
     # Post Conditions  
+    assert start_node == 0, "The path started at 0 (the start node)"
     assert len(path) > 0, "Path can not be empty" 
+    assert target in path, "Path needs to hit the target"
     assert current_node == last_node, "Ends with current node equals last node"
 
     return path
