@@ -45,10 +45,12 @@ def get_random_path():
             destination = last_node
 
     # Post Conditions  
+    assert check_path(graph_data.graph_data[int(global_game_data.current_graph_index)], path), "Not valid path"
     assert start_node == 0, "The path started at 0 (the start node)"
     assert len(path) > 0, "Path can not be empty" 
     assert target in path, "Path needs to hit the target"
     assert current_node == last_node, "Ends with current node equals last node"
+
 
     return path
 
@@ -63,3 +65,10 @@ def get_bfs_path():
 
 def get_dijkstra_path():
     return [1,2]
+
+def check_path(graph, path):
+    for i in range(len(path) - 1):
+        if path[i+1] not in graph[path[i]][1]:
+            return False
+    
+    return True

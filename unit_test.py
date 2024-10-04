@@ -1,5 +1,6 @@
 import math
 import unittest
+import pathing
 
 
 class TestPathFinding(unittest.TestCase):
@@ -22,7 +23,11 @@ class TestPathFinding(unittest.TestCase):
         self.assertAlmostEqual(first=first_value,second=second_value,delta=1e-9)
         self.assertNotEqual(almost_pi, pi)
         self.assertAlmostEqual(first=almost_pi, second=pi, delta=1e-1)
-
+    
+    def test_check_path(self):
+        graph = [(0, 0), [1]], [(50, -200), [0, 2]], [(50, -300), [1, 3]], [(200, -500), [2]]
+        path = [1, 2, 3]  
+        assert pathing.check_path(graph, path)
 
 if __name__ == '__main__':
     unittest.main()
