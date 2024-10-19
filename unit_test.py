@@ -29,5 +29,61 @@ class TestPathFinding(unittest.TestCase):
         path = [1, 2, 3]  
         assert pathing.check_path(graph, path)
 
+    def test_dfs_path(self):
+        graph = [[(0, 0), [1, 2, 3]],
+        [(50, -100), [0, 3, 4]],
+        [(100, 0), [0, 4, 5]], 
+        [(100, -200), [0, 1, 5]],
+        [(200, 0), [1, 2, 5, 6]],  
+        [(150, -300), [2, 3, 4, 6]], 
+        [(300, 100), [4, 5, 7]],    
+        [(350, 50), [6]]]
+        path = [0,3,5,6,7]
+        dfs_path = pathing.dfs(graph, 0, 7)
+        assert path == dfs_path, "Failed to navigate path using DFS"
+
+    def test_bfs_path(self):
+        graph = [[(0, 0), [1, 2, 3]],
+        [(50, -100), [0, 3, 4]],
+        [(100, 0), [0, 4, 5]], 
+        [(100, -200), [0, 1, 5]],
+        [(200, 0), [1, 2, 5, 6]],  
+        [(150, -300), [2, 3, 4, 6]], 
+        [(300, 100), [4, 5, 7]],    
+        [(350, 50), [6]]]
+        path = [0,1,4,6,7]
+        bfs_path = pathing.bfs(graph, 0, 7)
+        assert path == bfs_path, "Failed to navigate path using BFS"
+
+    def test_dfs_path_fail(self):
+        #disconnected nodes
+        graph = [
+        [(0, 0), [1, 2]],
+        [(1, 0), [0]],
+        [(0, 1), [0]],
+        [(10, 10), [4]], 
+        [(11, 10), [3]], 
+        [(20, 20), []], 
+        [(30, 30), [7]], 
+        [(31, 30), [6]]]
+        path = None
+        dfs_path = pathing.dfs(graph, 0, 7)   
+        assert path == dfs_path, "Failed to not find path using DFS" 
+
+    def test_dfs_path_fail(self):
+        #disconnected nodes
+        graph = [
+        [(0, 0), [1, 2]],
+        [(1, 0), [0]],
+        [(0, 1), [0]],
+        [(10, 10), [4]], 
+        [(11, 10), [3]], 
+        [(20, 20), []], 
+        [(30, 30), [7]], 
+        [(31, 30), [6]]]
+        path = None
+        dfs_path = pathing.bfs(graph, 0, 7)   
+        assert path == dfs_path, "Failed to not find path using BFS" 
+
 if __name__ == '__main__':
     unittest.main()

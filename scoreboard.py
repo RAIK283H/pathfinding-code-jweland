@@ -60,11 +60,13 @@ class Scoreboard:
                                    font_size=self.font_size, batch=batch, group=group, color=player[2][colors.TEXT_INDEX])
             self.player_path_display.append(
                 (path_label, player))
-            
+
+        self.winner_label = pyglet.text.Label('Winner : ', x=0, y=0,
+                                                        font_name='Arial', font_size=self.font_size, batch=batch, group=group)
 
     def update_elements_locations(self):
         self.distance_to_exit_label.x = config_data.window_width - self.stat_width
-        self.distance_to_exit_label.y = config_data.window_height - self.stat_height;
+        self.distance_to_exit_label.y = config_data.window_height - self.stat_height
         for index, (display_element, player) in enumerate(self.player_name_display):
             display_element.x = config_data.window_width - self.stat_width
             display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 2 - self.stat_height * (index * self.number_of_stats)
@@ -80,6 +82,10 @@ class Scoreboard:
         for index, (display_element, player) in enumerate(self.player_time_display):
             display_element.x = config_data.window_width - self.stat_width
             display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 6 - self.stat_height * (index * self.number_of_stats)
+        self.winner_label.x = config_data.window_width - self.stat_width
+        self.winner_label.y = config_data.window_height - self.base_height_offset - self.stat_height * 7 - self.stat_height * (index * self.number_of_stats)
+
+
 
     def update_paths(self):
         for index in range(len(config_data.player_data)):
@@ -92,6 +98,23 @@ class Scoreboard:
         end_y = graph_data.graph_data[global_game_data.current_graph_index][-1][0][1]
         self.distance_to_exit = math.sqrt(pow(start_x - end_x, 2) + pow(start_y - end_y, 2))
         self.distance_to_exit_label.text = 'Direct Distance To Exit : ' + "{0:.0f}".format(self.distance_to_exit)
+
+    def determine_winner(self):
+        min_distance = float('inf')
+        winner_index = 1
+    
+        for i, (display_element, player_configuration_info) in enumerate(self.player_traveled_display):
+            if i > 0:
+                for player_object in global_game_data.player_objects:
+                    if player_object.player_config_data == player_configuration_info:
+
+                        if player_object.distance_traveled > 0:
+                            if player_object.distance_traveled < min_distance:
+                                min_distance = player_object.distance_traveled
+                                winner_index = i
+
+        self.winner_label.text = 'Winner : ' + self.player_name_display[winner_index][1][0]
+
 
     def wrap_text(self, input):
         wrapped_text = (input[:44] + ', ...]') if len(input) > 44 else input
@@ -120,4 +143,5 @@ class Scoreboard:
         self.update_distance_to_exit()
         self.update_distance_traveled()
         self.update_time_taken()
+        self.determine_winner()
         

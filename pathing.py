@@ -1,6 +1,7 @@
 import graph_data
 import global_game_data
 from numpy import random
+from collections import deque
 
 def set_current_graph_paths():
     global_game_data.graph_paths.clear()
@@ -56,11 +57,99 @@ def get_random_path():
 
 
 def get_dfs_path():
-    return [1,2]
+    start_node = 0
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+    target = global_game_data.target_node[global_game_data.current_graph_index]
+    last_node = (len(graph) - 1)
 
+    # to get paths for path to target and end to target
+    path_to_target = dfs(graph, start_node, target)
+    path_to_end = dfs(graph, target, last_node)
+
+    # create the path
+    path = path_to_target[1:] + path_to_end[1:]
+
+    # post conditions
+    assert check_path(graph_data.graph_data[int(global_game_data.current_graph_index)], path), "Not valid path"
+    assert target in path, "Path needs to hit the target"
+    assert last_node in path, "Path needs to hit the last node"
+
+    return path
+
+# dfs function call
+def dfs(graph, start, end):
+    visited = set()
+    stack = [start]
+    parent = {start: None}
+
+    while stack:
+        node = stack.pop()
+
+        if node not in visited:
+            visited.add(node)
+
+            if node == end:
+                path = []
+                while node is not None:
+                    path.append(node)
+                    node = parent[node]
+                return path[::-1]
+            
+            neighbors = graph[node][1]
+
+            for neighbor in neighbors:
+                if neighbor not in visited:
+                    stack.append(neighbor)
+                    parent[neighbor] = node 
+
+    return None 
 
 def get_bfs_path():
-    return [1,2]
+    start_node = 0
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+    target = global_game_data.target_node[global_game_data.current_graph_index]
+    last_node = (len(graph) - 1)
+    
+    # to get paths for path to target and end to target
+    path_to_target = bfs(graph, start_node, target)
+    path_to_end = bfs(graph, target, last_node)
+
+    # create the path
+    path = path_to_target[1:] + path_to_end[1:]
+
+    # post conditions
+    assert check_path(graph_data.graph_data[int(global_game_data.current_graph_index)], path), "Not valid path"
+    assert target in path, "Path needs to hit the target"
+    assert last_node in path, "Path needs to hit the last node"
+    return path
+
+# main call for bfs
+def bfs(graph, start, end):
+    visited = set()
+    queue = deque([start])
+    parent = {start: None}
+    
+    while queue:
+        node = queue.popleft()
+        
+        if node == end:
+            path = []
+            while node is not None:
+                path.append(node)
+                node = parent[node]
+            return path[::-1]
+
+        if node not in visited:
+            visited.add(node)
+            
+            neighbors = graph[node][1]
+            
+            for neighbor in neighbors:
+                if neighbor not in visited and neighbor not in parent:
+                    queue.append(neighbor)
+                    parent[neighbor] = node
+
+    return None
 
 
 def get_dijkstra_path():
