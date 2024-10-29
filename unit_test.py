@@ -1,6 +1,7 @@
 import math
 import unittest
 import pathing
+import permutation
 
 
 class TestPathFinding(unittest.TestCase):
@@ -70,20 +71,45 @@ class TestPathFinding(unittest.TestCase):
         dfs_path = pathing.dfs(graph, 0, 7)   
         assert path == dfs_path, "Failed to not find path using DFS" 
 
-    def test_dfs_path_fail(self):
-        #disconnected nodes
+    def test_sjt(self):
         graph = [
-        [(0, 0), [1, 2]],
-        [(1, 0), [0]],
-        [(0, 1), [0]],
-        [(10, 10), [4]], 
-        [(11, 10), [3]], 
-        [(20, 20), []], 
-        [(30, 30), [7]], 
-        [(31, 30), [6]]]
-        path = None
-        dfs_path = pathing.bfs(graph, 0, 7)   
-        assert path == dfs_path, "Failed to not find path using BFS" 
+        [(0,0), [1,2]],
+        [(0,200), [0,3]],
+        [(200,200), [0,3]],
+        [(200,0), [1,2]]]
+        all_perms = [[0, 1, 2, 3], [0, 1, 3, 2], [0, 3, 1, 2], [3, 0, 1, 2], [3, 0, 2, 1], [0, 3, 2, 1], [0, 2, 3, 1], [0, 2, 1, 3], [2, 0, 1, 3], [2, 0, 3, 1], [2, 3, 0, 1], [3, 2, 0, 1], [3, 2, 1, 0], [2, 3, 1, 0], [2, 1, 3, 0], [2, 1, 0, 3], [1, 2, 0, 3], [1, 2, 3, 0], [1, 3, 2, 0], [3, 1, 2, 0], [3, 1, 0, 2], [1, 3, 0, 2], [1, 0, 3, 2], [1, 0, 2, 3]]
+        sjt_perms = permutation.sjt_permutations(graph)
+        assert all_perms == sjt_perms, "Failed to produce all permutations"
+    
+    def test_sjt_empty_graph(self):
+        graph = []
+        all_perms = []
+        sjt_perms = permutation.sjt_permutations(graph)
+        assert all_perms == sjt_perms, "Failed to produce [] with empty graph"
+
+    def test_hamilitonian(self):
+        graph = [
+        [(0,0), [1,2]],
+        [(0,200), [0,3]],
+        [(200,200), [0,3]],
+        [(200,0), [1,2]]]
+        cycles = [[0, 1, 3, 2, 0], [0, 2, 3, 1, 0], [2, 0, 1, 3, 2], [3, 2, 0, 1, 3], [2, 3, 1, 0, 2], [1, 3, 2, 0, 1], [3, 1, 0, 2, 3], [1, 0, 2, 3, 1]]
+        sjt_perms = permutation.sjt_permutations(graph)
+        perms = permutation.find_hamilition_cycles(graph, sjt_perms)
+        assert cycles == perms, "Failed to produce all permutations"
+
+    def test_optimal_cycle(self):
+        graph = [
+        [(0,0), [1,2]],
+        [(0,200), [0,3]],
+        [(200,200), [0,3]],
+        [(200,0), [1,2]]]
+        best_cycles = [[0, 1, 3, 2, 0], [0, 2, 3, 1, 0], [2, 0, 1, 3, 2], [3, 2, 0, 1, 3], [2, 3, 1, 0, 2], [1, 3, 2, 0, 1], [3, 1, 0, 2, 3], [1, 0, 2, 3, 1]]
+        sjt_perms = permutation.sjt_permutations(graph)
+        perms = permutation.find_hamilition_cycles(graph, sjt_perms)
+        best_perms = permutation.find_optimal_ham_cycles(perms, graph)
+        assert best_cycles == best_perms, "Failed to produce all permutations"
+
 
 if __name__ == '__main__':
     unittest.main()
