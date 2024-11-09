@@ -71,6 +71,21 @@ class TestPathFinding(unittest.TestCase):
         dfs_path = pathing.dfs(graph, 0, 7)   
         assert path == dfs_path, "Failed to not find path using DFS" 
 
+    def test_bfs_path_fail(self):
+        #disconnected nodes
+        graph = [
+        [(0, 0), [1, 2]],
+        [(1, 0), [0]],
+        [(0, 1), [0]],
+        [(10, 10), [4]], 
+        [(11, 10), [3]], 
+        [(20, 20), []], 
+        [(30, 30), [7]], 
+        [(31, 30), [6]]]
+        path = None
+        bfs_path = pathing.bfs(graph, 0, 7)   
+        assert path == bfs_path, "Failed to not find path using BFS" 
+
     def test_sjt(self):
         graph = [
         [(0,0), [1,2]],
@@ -122,6 +137,22 @@ class TestPathFinding(unittest.TestCase):
         path = [0,2,4,6,7]
         dijkstra_path = pathing.dijkstra_path(graph, 0, 7)
         assert path == dijkstra_path, "Failed to navigate path using Dijkstra's Path"
+
+    def test_dijkstra_fail(self):
+        #disconnected nodes
+        graph = [
+        [(0, 0), [1, 2]],
+        [(1, 0), [0]],
+        [(0, 1), [0]],
+        [(10, 10), [4]], 
+        [(11, 10), [3]], 
+        [(20, 20), []], 
+        [(30, 30), [7]], 
+        [(31, 30), [6]]]
+        path = None
+        dijkstra_path= pathing.dijkstra_path(graph, 0, 7)   
+        assert path == dijkstra_path, "Failed to not find path using Dijkstra" 
+
 
     def test_euclidean_distance(self):
         coord1 = (10,0)

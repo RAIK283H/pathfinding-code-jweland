@@ -176,9 +176,16 @@ def dijkstra_path(graph, start, end):
     while priority_queue:
         current_node = heapq.heappop(priority_queue)
 
-        # if target/node is hit, end
+        # if target/node is hit
         if current_node.id == end:
-            break
+            # build the path
+            path = []
+            current = end
+            while current is not None:
+                path.append(current)
+                current = parents.get(current)
+            path.reverse()
+            return path
 
         current_coord, neighbors = graph[current_node.id][0], graph[current_node.id][1]
 
@@ -194,14 +201,7 @@ def dijkstra_path(graph, start, end):
                 parents[neighbor] = current_node.id
                 heapq.heappush(priority_queue, Node(neighbor, new_distance))
 
-    # build the path
-    path = []
-    current = end
-    while current is not None:
-        path.append(current)
-        current = parents.get(current)
-    path.reverse()
-    return path
+    return None
 
 def get_dijkstra_path():
     start_node = 0
