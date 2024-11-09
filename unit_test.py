@@ -110,6 +110,26 @@ class TestPathFinding(unittest.TestCase):
         best_perms = permutation.find_optimal_ham_cycles(perms, graph)
         assert best_cycles == best_perms, "Failed to produce all permutations"
 
+    def test_dijkstra(self):
+        graph = [[(0, 0), [1, 2, 3]],
+        [(50, -100), [0, 3, 4]],
+        [(100, 0), [0, 4, 5]], 
+        [(100, -200), [0, 1, 5]],
+        [(200, 0), [1, 2, 5, 6]],  
+        [(150, -300), [2, 3, 4, 6]], 
+        [(300, 100), [4, 5, 7]],    
+        [(350, 50), [6]]]
+        path = [0,2,4,6,7]
+        dijkstra_path = pathing.dijkstra_path(graph, 0, 7)
+        assert path == dijkstra_path, "Failed to navigate path using Dijkstra's Path"
+
+    def test_euclidean_distance(self):
+        coord1 = (10,0)
+        coord2 = (20,0)
+        eclid = pathing.euclidean_distance(coord1, coord2)
+        assert eclid == 10, "Failed to calculate the correct euclidean distance"
+
+
 
 if __name__ == '__main__':
     unittest.main()
