@@ -2,6 +2,7 @@ import math
 import unittest
 import pathing
 import permutation
+import f_w
 
 
 class TestPathFinding(unittest.TestCase):
@@ -160,6 +161,48 @@ class TestPathFinding(unittest.TestCase):
         eclid = pathing.euclidean_distance(coord1, coord2)
         assert eclid == 10, "Failed to calculate the correct euclidean distance"
 
+    def test_f_w_small_matrix(self):
+        graph = [[(0, 0), [1]],
+        [(50, -200), [0, 2]],
+        [(50, -300), [1, 3]],
+        [(200, -500), [2]]]
+        path = [0,1,2,3]
+        matrix = f_w.adjacency_to_matrix(graph)
+        distances, parent = f_w.floyd_warshall(matrix)
+        f_w_path = f_w.floyd_warshall_path(parent, 0, 3)
+        assert path == f_w_path, "Failed to navigate path using Floyd-Warshall's Path"
+
+    def test_f_w_large_matrix(self):
+        graph = [[(0, 0), [1, 2, 3]],
+        [(50, -100), [0, 3, 4]],
+        [(100, 0), [0, 4, 5]], 
+        [(100, -200), [0, 1, 5]],
+        [(200, 0), [1, 2, 5, 6]],  
+        [(150, -300), [2, 3, 4, 6]], 
+        [(300, 100), [4, 5, 7]],    
+        [(350, 50), [6]]]
+        path = [0,2,4,6,7]
+        matrix = f_w.adjacency_to_matrix(graph)
+        distances, parent = f_w.floyd_warshall(matrix)
+        f_w_path = f_w.floyd_warshall_path(parent, 0, 7)
+        assert path == f_w_path, "Failed to navigate path using Floyd-Warshall's Path"
+
+    def test_f_w_fail(self):
+        #disconnected nodes
+        graph = [
+        [(0, 0), [1, 2]],
+        [(1, 0), [0]],
+        [(0, 1), [0]],
+        [(10, 10), [4]], 
+        [(11, 10), [3]], 
+        [(20, 20), []], 
+        [(30, 30), [7]], 
+        [(31, 30), [6]]]
+        path = None
+        matrix = f_w.adjacency_to_matrix(graph)
+        distances, parent = f_w.floyd_warshall(matrix)
+        f_w_path = f_w.floyd_warshall_path(parent, 0, 7)
+        assert path == f_w_path, "Failed to not find path using Floyd-Marshall" 
 
 
 if __name__ == '__main__':
