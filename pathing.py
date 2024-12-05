@@ -4,6 +4,7 @@ from numpy import random
 from collections import deque
 import heapq
 import math
+import f_w
 
 def set_current_graph_paths():
     global_game_data.graph_paths.clear()
@@ -11,7 +12,7 @@ def set_current_graph_paths():
     global_game_data.graph_paths.append(get_random_path())
     global_game_data.graph_paths.append(get_dfs_path())
     global_game_data.graph_paths.append(get_bfs_path())
-    global_game_data.graph_paths.append(get_dijkstra_path())
+    global_game_data.graph_paths.append(get_f_w_path())
 
 
 def get_test_path():
@@ -220,6 +221,19 @@ def get_dijkstra_path():
     assert check_path(graph, final_path), "Path is connected"
     return final_path
 
+
+def get_f_w_path():
+    start_node = 0
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+    target = global_game_data.target_node[global_game_data.current_graph_index]
+    last_node = len(graph) - 1
+
+    matrix = f_w.adjacency_to_matrix(graph)
+    distances, parent = f_w.floyd_warshall(matrix)
+    final_path = f_w.floyd_warshall_path(parent, start_node, last_node)
+    final_path = final_path[1:]
+
+    return final_path
 
 def check_path(graph, path):
     for i in range(len(path) - 1):

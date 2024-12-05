@@ -54,10 +54,10 @@ def floyd_warshall_path(P, i, j):
 
 
 if __name__ == "__main__":
-    graph = graph_data[1]
+    graph = graph_data[0]
     matrix = adjacency_to_matrix(graph)
     distances, parent = floyd_warshall(matrix)
-    path = floyd_warshall_path(parent, 0, 3)
+    path = floyd_warshall_path(parent, 0, 2)
 
     print("Matrix:")
     for row in distances:
